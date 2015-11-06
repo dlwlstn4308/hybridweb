@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
-
+public class MainActivity extends Activity implements OnClickListener {
+	Button btnWeb80;
+	Button btnWeb8080;
 	WebView myweb;
 	
 	@Override
@@ -21,10 +25,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		btnWeb80 = (Button) findViewById(R.id.btnWeb80);
+		btnWeb8080 = (Button) findViewById(R.id.btnWeb8080);
+		
+		btnWeb80.setOnClickListener(this);
+		btnWeb8080.setOnClickListener(this);
+		
 		myweb = (WebView) findViewById(R.id.myweb);
 		
 		WebSettings settings = myweb.getSettings();
 		settings.setJavaScriptEnabled(true);
+		settings.setBuiltInZoomControls(true);
 		
 		myweb.addJavascriptInterface(new MyjavascriptInterface(), "android");	
 		// 자바스크립트에서 자바를 호출 할수있도록 하는 인터페이스 역활
@@ -73,5 +84,22 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnWeb80:
+			myweb.loadUrl("http://192.168.10.17");
+			break;
+		
+		case R.id.btnWeb8080:
+			myweb.loadUrl("http://192.168.10.17:8080/web");
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 }
